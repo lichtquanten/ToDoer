@@ -1,32 +1,48 @@
-var db = require("../app").db;
-var User = require("./home");
+var db = require("./db");
+var bcrypt = require("bcryptjs");
 
-module.exports.login = function(req,res) {
+module.exports.checkLogin = function(email, password) {
+  console.log("YO");
+
+  db.one("SELECT password_hash FROM Person WHERE email=$1", [email])
+  .then(data => {
+    console.log("HERE THE THE DB RESULTS");
+    console.log(data);
+  }, error => {
+    console.log(error);
+  })
 }
 
-module.exports.register = function(req,res) {
-  var newUser = new User({
-    fname: req.body.fname,
-    lname: req.body.lname,
-    email: req.body.email,
-    password: ""
-  })
-  newUser.password = newUser.generateHash(req.body.password);
-  newUser.save(function(err) {
-    if (err) {
-      throw err;
+module.exports.verify = function(email, password, done) {
+  db.any("SELECT * FROM Person WHERE email=$1", [email])
+  .then(function(data) {
+    if (!data.length) {
+      console.log("Email not found!");
+      done(null, false, { message: "Email not found." });
+    } else {
+      if (data[0].password_hash == password) {
+        console.log("Correct email and password!");
+        done(null, data[0]);
+      } else {
+        console.log("Incorrect password!");
+        done(null, false, { message: "Incorrect password" });
+      }
     }
-    console.log("User with email "+req.body.email+"created!");
+  }, function(err) {
+    console.log("COULD NOT QUERY DB TO VERIFY");
   })
-  res.send("Created user account");
 }
 
-module.exports.returnUserData = function(req,res) {
-  User.find({}, function(err, users) {
-    var userMap = {};
-    users.forEach(function(user) {
-      userMap[user.fname] = user;
-    });
-    res.send(userMap);
+module.exports.getUserById = function(id) {
+  db.any("SELECT * FROM Person WHERE id=$1", [id])
+  .then(function(data) {
+    console.log("HEY", typeof(data[0]));
+    if (!data.length) {
+      return "error. user not found.";
+    } else {
+      return data[0];
+    }
+  }, function(err) {
+    console.log("COULD NOT QUERY DB FOR USER ID");
   })
 }

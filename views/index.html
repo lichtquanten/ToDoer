@@ -1,42 +1,14 @@
 <!DOCTYPE html>
 <head>
    <title>ToDoer</title>
-   <link rel="stylesheet" href="./css/styles.css">
+   <link rel="stylesheet" href="./public/css/styles.css">
    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-   <script type="text/javascript" src="./js/script.js">
-   </script>
 </head>
 <body>
+  <div id="app"></div>
    <div id="body_wrapper">
    <header id="banner">
-      <h1 id="title">Welcome to ToDoer</h1>
+      <h1 id="title">MEEEME</h1>
    </header>
-   <div id="main body">
-      <div id="login_area">
-         <div id="login">
-         <p class="form_welcome">Login!</p>
-            <form id="login_form" name="login">
-               Email: <input id="login_email" type="text" placeholder="Email" autofocus></input>
-               Password: <input id="login_password" type="password" placeholder="Password"></input>
-               <input id="login_button" type="submit" value="Submit">
-            </form>
-            <p id="switch_to_register" class="clickable">New here? Click to register</p>
-         </div>
-         <div id="register">
-           <p class="form_welcome">Register!</p>
-           <form id="register_form">
-             <input id="register_fname" type="text" placeholder="First name">
-             <input id="register_lname" type="text" placeholder="Last name">
-             <input id="register_email" type="text" placeholder="Email">
-             <input id="register_password" type="password" placeholder="Password">
-             <input id="register_confirm_password" type="password" placeholder="Confirm password">
-             <input id="register_button" type="submit" value="Submit">
-           </form>
-           <p id="switch_to_login" class="clickable">Been here before? Click to login</p>
-         </div>
-      </div>
-      <footer>
-         <p id="signature">Created by Sean Hackett</p>
-      </footer>
-   </div>
+   <script type="text/javascript" src="./public/js/auth.bundled.js"></script>
 </body>

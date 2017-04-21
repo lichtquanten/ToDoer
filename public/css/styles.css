@@ -18,8 +18,8 @@ input {
   margin-bottom: 2em;
 }
 
-.error {
-  border-color: red;
+.errors {
+  color: red;
 }
 
 #login-email {
