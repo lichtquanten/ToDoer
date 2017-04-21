@@ -1,29 +1,26 @@
-var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
-var authModels = require("../models/auth.js");
+var mod = require("../models/mod.js");
 
-module.exports = function(app) {
-  app.use(passport.initialize());
-  app.use(passport.session());
-
+module.exports = function(passport) {
   passport.use(new LocalStrategy(
     {
       usernameField: "email",
       passwordField: "password"
     },
-    function(email, password, done) {
-      authModels.verify(email, password, done.bind(this));
-    }
+    mod.verify
   ));
   passport.serializeUser(function(user, done) {
-    console.log(user);
     done(null, user.id);
   });
   passport.deserializeUser(function(id, done) {
-    var user = authModels.getUserById(id);
-    console.log("DESERIALIZE");
-    done(null, user)
+    mod.getUserById(id, function(err, user) {
+      if (err) return done(err);
+      if (user) {
+        return done(null, user);
+      } else {
+        console.log("FAILED DESERIALIZE");
+        return done(null, false);
+      }
+    });
   });
 }
-
-module.exports.passport = passport;

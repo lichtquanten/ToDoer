@@ -1,73 +1,89 @@
-var passport = require("./setupPassport").passport;
+var validator = require("validator");
+var passport;
 
+module.exports.import = function(pport) {
+  passport = pport;
+}
 module.exports.login = function(req, res, next) {
-  var email = req.body.email, password = req.body.password;
-  var errors = getLoginErrors(email, password);
+  var errors = getLoginErrors(req.body);
 
-  if (Object.keys(errors).length) {
+  if (errors.blank.length > 0 || errors.tooLong.length > 0  || errors.invalid.length > 0) {
     return res.send({errors: errors});
   } else {
-    passport.authenticate("local", function(err, user, info) {
-      console.log(err, user, info);
+    passport.authenticate("local",  function(err, user, info) {
       if (err) {
         console.log("passport.authenticate error");
         return next(err);
       }
       if (!user) {
-        return res.send({errors: {incorrectAuth: true, incorrectAuthMessage: info.message}});
+        errors.invalid.push("auth");
+        errors.incorrectAuthMessage = info.message;
+        return res.send({errors: errors});
       }
       req.login(user, function(err) {
         if (err) {
           return next(err);
         }
-        return res.send({redirect: "/list"});
+        return res.send({errors: errors, redirect: "/yo"});
       });
     })(req, res, next);
   }
 }
 
-function getLoginErrors(email, password) {
-  var errors = {};
-  if (email.length == 0) {
-   errors.emailBlank = true;
+module.exports.register = function(req, res, next) {
+  var errors = getRegisterErrors(req.body);
+
+  if (errors.blank.length > 0 || errors.tooLong.length > 0 || errors.invalid.length > 0) {
+    return res.send({errors: errors});
   } else {
-     if (!testEmail(email)) {
-       errors.emailInvalid = true;
+    mod.addUser(req.body, function(user) {
+      if (!user) return;
+      req.login(user, function(err) {
+        if (err) return err;
+        return res.send({redirect: "/list"});
+      });
+    })
+  }
+}
+
+function getLoginErrors(input) {
+  var errors = {
+    blank: [],
+    tooLong: [],
+    invalid: []
+  };
+  if (input.email.length == 0) {
+   errors.blank.push("email");
+  } else {
+     if (!validator.isEmail(input.email)) {
+       errors.invalid.push("email");
      }
-     if (email.length > 50) {
-      errors.emailTooLong = true;
+     if (input.email.length > 50) {
+      errors.tooLong.push("email");
       }
   }
-  if (password.length == 0) {
-   errors.passwordBlank = true;
-  } else if (password.length > 50) {
-    errors.passwordTooLong = true;
+  if (input.password.length == 0) {
+   errors.blank.push("password");
+ } else if (input.password.length > 50) {
+    errors.tooLong.push("password");
   }
   return errors;
 }
 
-module.exports.register = function(req,res) {
-  var newUser = new User({
-    fname: req.body.fname,
-    lname: req.body.lname,
-    email: req.body.email,
-    password: ""
-  })
-  newUser.password = newUser.generateHash(req.body.password);
-  newUser.save(function(err) {
-    if (err) {
-      throw err;
-    }
-    console.log("User with email "+req.body.email+"created!");
-  })
-  res.send("Created user account");
-}
+function getRegisterErrors(input) {
+  var errors = getLoginErrors(input);
+  if (input.name.length == 0) {
+   errors.blank.push("name")
+ } else if (input.name.length > 50) {
+    errors.tooLong.push("name");
+  }
+  if (input.confirmPassword.length == 0) {
+   errors.blank.push("confirmPassword");
+ } else if (input.confirmPassword.length > 50) {
+    errors.tooLong.push("confirmPassword");
+  } else if (input.password != input.confirmPassword) {
+    errors.invalid.push("confirmPassword");
+  }
 
-function testEmail(email) {
-    if (!email) {
-        return false;
-    } else if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email)) {
-        return email;
-    }
-    return false;
+  return errors;
 }

@@ -1,7 +1,9 @@
 var express = require('express');
 var app = express();
 var router = require('../controllers/routes.js')(express);
-var setupPassport = require("../controllers/setupPassport.js")(app);
+var passport = require("passport");
+var setupPassport = require("../controllers/setupPassport.js")(passport);
+var auth = require("../controllers/auth.js").import(passport);
 var session = require('express-session');
 var bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser');
@@ -13,6 +15,8 @@ var PORT = process.env.PORT || 8000;
 
 app.use(cookieParser());
 app.use(session({ secret: 'supersecret', resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 //flashmessages
 app.use(flash());

@@ -8,7 +8,11 @@ class Login extends React.Component {
     this.passwordError = this.passwordError.bind(this);
 
     this.state = {
-      errors: {}
+      errors: {
+        blank: [],
+        tooLong: [],
+        invalid: []
+      }
     };
     this.waiting = false;
   }
@@ -25,17 +29,19 @@ class Login extends React.Component {
           password: $("#login_password").val()
         },
         success: (function(res) {
+          console.log("SUCCC");
+          console.log(res);
           this.waiting = false;
-          console.log(res.errors);
-          if (res.errors){
+          if (res.errors.blank.length > 0 || res.errors.tooLong.length > 0 || res.errors.invalid.length > 0){
             this.setState({errors: res.errors});
           }
           if (res.redirect) {
             window.location.href = res.redirect;
+            console.log("REDIRECTING TO:", res.redirect.redirect);
           }
         }).bind(this),
         error: function(err) {
-          console.log(err);
+          console.log("ERRR");
           this.waiting = false;
           alert("Server error.");
         }
@@ -45,23 +51,20 @@ class Login extends React.Component {
 
   emailError(errors) {
     var temp = "Error: ", changed = false;
-    if (errors.hasOwnProperty("emailBlank") && errors.emailBlank) {
+    if (errors.blank.indexOf("email") != -1) {
       temp += "Email required.";
       changed = true;
     }
-    if (errors.hasOwnProperty("emailTooLong") && errors.emailTooLong) {
+    if (errors.tooLong.indexOf("email") != -1) {
         temp += "Email too long.  ";
         changed = true;
     }
-    if (errors.hasOwnProperty("emailInvalid") && errors.emailInvalid) {
+    if (errors.invalid.indexOf("email") != -1) {
       temp += "Email invalid.  ";
       changed = true;
     }
-    if (errors.hasOwnProperty("emailNotFound") && errors.emailNotFound) {
-      temp += "Email not found.  Please register.";
-      changed = true;
-    }
-    if (errors.hasOwnProperty("incorrectAuth") && errors.incorrectAuth) {
+    if (errors.invalid.indexOf("auth") != -1) {
+      console.log("INVALID AUTH");
       temp += errors.incorrectAuthMessage;
       changed = true;
     }
@@ -72,15 +75,12 @@ class Login extends React.Component {
   }
   passwordError(errors) {
     var temp = "Error: ", changed = false;
-    if (errors.passwordBlank) {
+    if (errors.blank.indexOf("password") != -1) {
       temp += "Password required.";
       changed = true;
-    } else if (errors.passwordTooLong) {
+    } else if (errors.tooLong.indexOf("password") != -1) {
         temp += "Password too long.  ";
         changed = true;
-    } else if (errors.wrongPassword) {
-      temp += "Wrong password.  ";
-      changed = true;
     }
     if (!changed) {
       return;
