@@ -57,10 +57,13 @@ module.exports.addTodo = function(ownerID, input, cb) {
 
 module.exports.getTodos = function(ownerID, email, cb) {
   console.log("OWNERID", ownerID);
+  console.log("OWNER EMAIL", email);
   db.any("SELECT * FROM Todo WHERE owner_id=$1", [ownerID])
   .then(function(ownedTodos) {
+    console.log("OWNED", ownedTodos);
     db.any("SELECT * FROM Todo WHERE collab1_email=$1 OR collab2_email=$1 OR collab3_email=$1", [email])
     .then(function(sharedTodos) {
+      console.log("SHARED", sharedTodos);
       return cb(null, {ownedTodos: ownedTodos, sharedTodos: sharedTodos});
     }).catch(function(err) {
       console.log(err);
