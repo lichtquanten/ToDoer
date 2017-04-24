@@ -4,6 +4,7 @@ module.exports = {
 	context: path.join(__dirname, "src"),
 	entry: {
 		auth:  "./auth/App.jsx",
+		dashboard: "./dashboard/App.jsx"
 	},
 	resolve: {
 	 extensions: ['.js', '.jsx']

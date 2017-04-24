@@ -14,39 +14,36 @@ class Login extends React.Component {
         invalid: []
       }
     };
-    this.waiting = false;
   }
   onSubmit(e) {
     e.preventDefault();
-    if (this.waiting) {
-      alert("Please wait...");
-    } else {
-      $.ajax({
-        url: "/login",
-        type: "POST",
-        data: {
-          email: $("#login_email").val(),
-          password: $("#login_password").val()
-        },
-        success: (function(res) {
-          console.log("SUCCC");
-          console.log(res);
-          this.waiting = false;
-          if (res.errors.blank.length > 0 || res.errors.tooLong.length > 0 || res.errors.invalid.length > 0){
-            this.setState({errors: res.errors});
-          }
-          if (res.redirect) {
+    $.ajax({
+      url: "/login",
+      type: "POST",
+      data: {
+        email: $("#email").val(),
+        password: $("#password").val()
+      },
+      success: (function(res) {
+        console.log(res);
+        if (res.redirect) {
+          this.props.handleSuccessulAuthentication();
+          // setTimeout(function() {
             window.location.href = res.redirect;
-            console.log("REDIRECTING TO:", res.redirect.redirect);
-          }
-        }).bind(this),
-        error: function(err) {
-          console.log("ERRR");
-          this.waiting = false;
-          alert("Server error.");
+            return;
+          // }, 100);
+          // window.location.href = res.redirect;
+          // console.log("REDIRECTING TO:", res.redirect.redirect);
         }
-      });
-    }
+        if (res.errors.blank.length > 0 || res.errors.tooLong.length > 0 || res.errors.invalid.length > 0){
+          this.setState({errors: res.errors});
+        }
+      }).bind(this),
+      error: function(err) {
+        console.log(err);
+        alert("Server error.");
+      }
+    });
   }
 
   emailError(errors) {
@@ -54,8 +51,7 @@ class Login extends React.Component {
     if (errors.blank.indexOf("email") != -1) {
       temp += "Email required.";
       changed = true;
-    }
-    if (errors.tooLong.indexOf("email") != -1) {
+    } if (errors.tooLong.indexOf("email") != -1) {
         temp += "Email too long.  ";
         changed = true;
     }
@@ -90,12 +86,14 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        <form className="login" name="login" onSubmit={this.onSubmit}>
-            Email: <input className="email" id="login_email" type="text" placeholder="Email" autoFocus></input>
+        <form className="login" onSubmit={this.onSubmit}>
+          <label htmlFor="email">Email</label>
+          <input name="email" id="email" type="text"></input><br></br>
           <p className="errors">{this.emailError(this.state.errors)}</p>
-          Password: <input className="password" id="login_password" type="password" placeholder="Password"></input>
+          <label htmlFor="password">Password</label>
+          <input name="password"  id="password" type="text"></input><br></br>
           <p className="errors">{this.passwordError(this.state.errors)}</p>
-          <input id="log-in-submit" type="submit"></input>
+          <input type="submit"  className="log-in-submit"></input>
         </form>
     </div>
     )

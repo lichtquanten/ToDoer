@@ -1,33 +1,6 @@
-#wrapper {
-
-}
-#login {
-  display: block;
-}
-
-#register {
-  display: none;
-}
-
-.form-welcome {
-
-}
-
-input {
-  display: block;
-  margin-bottom: 2em;
-}
 
 .errors {
   color: red;
-}
-
-#login-email {
-  display: block;
-}
-
-#login-password {
-
 }
 
 .clickable {

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 185);
+/******/ 	return __webpack_require__(__webpack_require__.s = 186);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -21973,7 +21973,9 @@ module.exports = traverseAllChildren;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 181 */
+/* 181 */,
+/* 182 */,
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21993,18 +21995,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Login = function (_React$Component) {
-  _inherits(Login, _React$Component);
+var Form = function (_React$Component) {
+  _inherits(Form, _React$Component);
 
-  function Login(props) {
-    _classCallCheck(this, Login);
+  function Form(props) {
+    _classCallCheck(this, Form);
 
-    var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
 
     _this.onSubmit = _this.onSubmit.bind(_this);
-    _this.emailError = _this.emailError.bind(_this);
-    _this.passwordError = _this.passwordError.bind(_this);
-
     _this.state = {
       errors: {
         blank: [],
@@ -22015,190 +22014,26 @@ var Login = function (_React$Component) {
     return _this;
   }
 
-  _createClass(Login, [{
+  _createClass(Form, [{
     key: "onSubmit",
     value: function onSubmit(e) {
       e.preventDefault();
+      console.log("SENDING AJAX");
       $.ajax({
-        url: "/login",
+        url: "/addTodo",
         type: "POST",
         data: {
-          email: $("#email").val(),
-          password: $("#password").val()
+          form_name: $("#form_name").val(),
+          form_description: $("#form_description").val(),
+          form_collaborator1: $("#form_collaborator1").val(),
+          form_collaborator2: $("#form_collaborator2").val(),
+          form_collaborator3: $("#form_collaborator3").val()
         },
         success: function (res) {
           console.log(res);
           if (res.redirect) {
-            this.props.handleSuccessulAuthentication();
-            // setTimeout(function() {
             window.location.href = res.redirect;
             return;
-            // }, 100);
-            // window.location.href = res.redirect;
-            // console.log("REDIRECTING TO:", res.redirect.redirect);
-          }
-          if (res.errors.blank.length > 0 || res.errors.tooLong.length > 0 || res.errors.invalid.length > 0) {
-            this.setState({ errors: res.errors });
-          }
-        }.bind(this),
-        error: function error(err) {
-          console.log(err);
-          alert("Server error.");
-        }
-      });
-    }
-  }, {
-    key: "emailError",
-    value: function emailError(errors) {
-      var temp = "Error: ",
-          changed = false;
-      if (errors.blank.indexOf("email") != -1) {
-        temp += "Email required.";
-        changed = true;
-      }if (errors.tooLong.indexOf("email") != -1) {
-        temp += "Email too long.  ";
-        changed = true;
-      }
-      if (errors.invalid.indexOf("email") != -1) {
-        temp += "Email invalid.  ";
-        changed = true;
-      }
-      if (errors.invalid.indexOf("auth") != -1) {
-        console.log("INVALID AUTH");
-        temp += errors.incorrectAuthMessage;
-        changed = true;
-      }
-      if (!changed) {
-        return;
-      }
-      return temp;
-    }
-  }, {
-    key: "passwordError",
-    value: function passwordError(errors) {
-      var temp = "Error: ",
-          changed = false;
-      if (errors.blank.indexOf("password") != -1) {
-        temp += "Password required.";
-        changed = true;
-      } else if (errors.tooLong.indexOf("password") != -1) {
-        temp += "Password too long.  ";
-        changed = true;
-      }
-      if (!changed) {
-        return;
-      }
-      return temp;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react2.default.createElement(
-        "div",
-        null,
-        _react2.default.createElement(
-          "form",
-          { className: "login", onSubmit: this.onSubmit },
-          _react2.default.createElement(
-            "label",
-            { htmlFor: "email" },
-            "Email"
-          ),
-          _react2.default.createElement("input", { name: "email", id: "email", type: "text" }),
-          _react2.default.createElement("br", null),
-          _react2.default.createElement(
-            "p",
-            { className: "errors" },
-            this.emailError(this.state.errors)
-          ),
-          _react2.default.createElement(
-            "label",
-            { htmlFor: "password" },
-            "Password"
-          ),
-          _react2.default.createElement("input", { name: "password", id: "password", type: "text" }),
-          _react2.default.createElement("br", null),
-          _react2.default.createElement(
-            "p",
-            { className: "errors" },
-            this.passwordError(this.state.errors)
-          ),
-          _react2.default.createElement("input", { type: "submit", className: "log-in-submit" })
-        )
-      );
-    }
-  }]);
-
-  return Login;
-}(_react2.default.Component);
-
-module.exports = Login;
-
-/***/ }),
-/* 182 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(25);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Login = function (_React$Component) {
-  _inherits(Login, _React$Component);
-
-  function Login(props) {
-    _classCallCheck(this, Login);
-
-    var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
-
-    _this.onSubmit = _this.onSubmit.bind(_this);
-    _this.emailError = _this.emailError.bind(_this);
-    _this.passwordError = _this.passwordError.bind(_this);
-
-    _this.state = {
-      errors: {
-        blank: [],
-        tooLong: [],
-        invalid: []
-      }
-    };
-    return _this;
-  }
-
-  _createClass(Login, [{
-    key: "onSubmit",
-    value: function onSubmit(e) {
-      e.preventDefault();
-      $.ajax({
-        url: "/register",
-        type: "POST",
-        data: {
-          name: $("#register_name").val(),
-          email: $("#register_email").val(),
-          password: $("#register_password").val(),
-          confirmPassword: $("#register_confirmPassword").val()
-        },
-        success: function (res) {
-          if (res.redirect) {
-            this.props.handleSuccessulAuthentication();
-            // setTimeout(function() {
-            window.location.href = res.redirect;
-            return;
-            // }, 100);
-            // window.location.href = res.redirect;
-            // console.log("REDIRECTING TO:", res.redirect.redirect);
           }
           if (res.errors.blank.length > 0 || res.errors.tooLong.length > 0 || res.errors.invalid.length > 0) {
             this.setState({ errors: res.errors });
@@ -22228,19 +22063,15 @@ var Login = function (_React$Component) {
       return temp;
     }
   }, {
-    key: "emailError",
-    value: function emailError(errors) {
+    key: "descriptionError",
+    value: function descriptionError(errors) {
       var temp = "Error: ",
           changed = false;
-      if (errors.blank.indexOf("email") != -1) {
-        temp += "Email required.";
+      if (errors.blank.indexOf("description") != -1) {
+        temp += "Name required.";
         changed = true;
-      } else if (errors.tooLong.indexOf("email") != -1) {
-        temp += "Email too long.  ";
-        changed = true;
-      }
-      if (errors.invalid.indexOf("email") != -1) {
-        temp += "Email invalid.  ";
+      } else if (errors.tooLong.indexOf("description") != -1) {
+        temp += "Name too long.  ";
         changed = true;
       }
       if (!changed) {
@@ -22249,42 +22080,11 @@ var Login = function (_React$Component) {
       return temp;
     }
   }, {
-    key: "passwordError",
-    value: function passwordError(errors) {
-      var temp = "Error: ",
-          changed = false;
-      if (errors.blank.indexOf("password") != -1) {
-        temp += "Password required.";
-        changed = true;
-      } else if (errors.tooLong.indexOf("password") != -1) {
-        temp += "Password too long.  ";
-        changed = true;
+    key: "collaboratorError",
+    value: function collaboratorError(errors, collaborator) {
+      if (errors.invalid.indexOf(collaborator) != -1) {
+        return "Error: Email invalid";
       }
-      if (!changed) {
-        return;
-      }
-      return temp;
-    }
-  }, {
-    key: "confirmPasswordError",
-    value: function confirmPasswordError(errors) {
-      var temp = "Error: ",
-          changed = false;
-      if (errors.blank.indexOf("confirmPassword") != -1) {
-        temp += "Password confirmation required.";
-        changed = true;
-      } else if (errors.tooLong.indexOf("confirmPassword") != -1) {
-        temp += "Password confirmation too long.  ";
-        changed = true;
-      }
-      if (errors.invalid.indexOf("confirmPassword") != -1) {
-        temp += "Password confirmation must match password.  ";
-        changed = true;
-      }
-      if (!changed) {
-        return;
-      }
-      return temp;
     }
   }, {
     key: "render",
@@ -22293,51 +22093,149 @@ var Login = function (_React$Component) {
         "div",
         null,
         _react2.default.createElement(
+          "h4",
+          null,
+          "Add a new task"
+        ),
+        _react2.default.createElement(
           "form",
-          { className: "register", name: "register", onSubmit: this.onSubmit },
-          "Name: ",
-          _react2.default.createElement("input", { name: "name", className: "text-input", id: "register_name", type: "text", placeholder: "first and last name" }),
+          { className: "createTask", onSubmit: this.onSubmit },
+          _react2.default.createElement(
+            "label",
+            { htmlFor: "name" },
+            "Task name"
+          ),
+          _react2.default.createElement("input", { id: "form_name", name: "name", type: "text" }),
           _react2.default.createElement(
             "p",
             { className: "errors" },
             this.nameError(this.state.errors)
           ),
-          "Email: ",
-          _react2.default.createElement("input", { name: "email", className: "text-input", id: "register_email", type: "email", placeholder: "email" }),
+          _react2.default.createElement("br", null),
+          _react2.default.createElement(
+            "label",
+            { htmlFor: "description" },
+            "Task Description"
+          ),
+          _react2.default.createElement("input", { id: "form_description", name: "description", type: "text" }),
           _react2.default.createElement(
             "p",
             { className: "errors" },
-            this.emailError(this.state.errors)
+            this.descriptionError(this.state.errors)
           ),
-          "Password: ",
-          _react2.default.createElement("input", { name: "password", className: "text-input", id: "register_password", type: "password", placeholder: "password" }),
+          _react2.default.createElement("br", null),
+          "Collaborators",
+          _react2.default.createElement("br", null),
+          _react2.default.createElement("input", { id: "form_collaborator1", name: "collaborator1", type: "email" }),
           _react2.default.createElement(
             "p",
             { className: "errors" },
-            this.passwordError(this.state.errors)
+            this.collaboratorError(this.state.errors, "collaborator1")
           ),
-          "Confirm Password: ",
-          _react2.default.createElement("input", { name: "passwordConfirmation", className: "text-input", id: "register_confirmPassword", type: "password", placeholder: "password confirmation" }),
+          _react2.default.createElement("br", null),
+          _react2.default.createElement("input", { id: "form_collaborator2", name: "collaborator2", type: "email" }),
           _react2.default.createElement(
             "p",
             { className: "errors" },
-            this.confirmPasswordError(this.state.errors)
+            this.collaboratorError(this.state.errors, "collaborator2")
           ),
-          _react2.default.createElement("input", { id: "log-in-submit", type: "submit" })
+          _react2.default.createElement("br", null),
+          _react2.default.createElement("input", { id: "form_collaborator3", name: "collaborator3", type: "email" }),
+          _react2.default.createElement(
+            "p",
+            { className: "errors" },
+            this.collaboratorError(this.state.errors, "collaborator3")
+          ),
+          _react2.default.createElement("br", null),
+          _react2.default.createElement("input", { type: "submit", className: "create-task-submit" })
         )
       );
     }
   }]);
 
-  return Login;
+  return Form;
 }(_react2.default.Component);
 
-module.exports = Login;
+module.exports = Form;
 
 /***/ }),
-/* 183 */,
-/* 184 */,
-/* 185 */
+/* 184 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(25);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Todo = __webpack_require__(187);
+
+var _Todo2 = _interopRequireDefault(_Todo);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Todos = function (_React$Component) {
+  _inherits(Todos, _React$Component);
+
+  function Todos(props) {
+    _classCallCheck(this, Todos);
+
+    var _this = _possibleConstructorReturn(this, (Todos.__proto__ || Object.getPrototypeOf(Todos)).call(this, props));
+
+    _this.ownedTodos = _this.props.rawTodos.ownedTodos.map(function (rawTodo) {
+      return _react2.default.createElement(
+        "li",
+        { className: "task" },
+        _react2.default.createElement(_Todo2.default, { rawTodo: rawTodo, owned: true })
+      );
+    }.bind(_this));
+    _this.sharedTodos = _this.props.rawTodos.sharedTodos.map(function (rawTodo) {
+      return _react2.default.createElement(
+        "li",
+        { className: "task" },
+        _react2.default.createElement(_Todo2.default, { rawTodo: rawTodo, owned: false })
+      );
+    }.bind(_this));
+    return _this;
+  }
+
+  _createClass(Todos, [{
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "div",
+        null,
+        _react2.default.createElement(
+          "ul",
+          null,
+          this.ownedTodos
+        ),
+        _react2.default.createElement(
+          "ul",
+          null,
+          this.sharedTodos
+        )
+      );
+    }
+  }]);
+
+  return Todos;
+}(_react2.default.Component);
+
+module.exports = Todos;
+
+/***/ }),
+/* 185 */,
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22353,13 +22251,13 @@ var _reactDom = __webpack_require__(81);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Login = __webpack_require__(181);
+var _Form = __webpack_require__(183);
 
-var _Login2 = _interopRequireDefault(_Login);
+var _Form2 = _interopRequireDefault(_Form);
 
-var _Register = __webpack_require__(182);
+var _Todos = __webpack_require__(184);
 
-var _Register2 = _interopRequireDefault(_Register);
+var _Todos2 = _interopRequireDefault(_Todos);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22372,30 +22270,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
 
-  function App(props) {
+  function App() {
     _classCallCheck(this, App);
 
-    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
-    _this.handleSuccessulAuthentication = _this.handleSuccessulAuthentication.bind(_this);
-    _this.conditionalRender = _this.conditionalRender.bind(_this);
-    _this.state = {
-      isSuccessfullyAuthenticated: false
-    };
+    _this.appData = window.appData;
+    console.log(_this.appData.todos);
     return _this;
   }
 
   _createClass(App, [{
-    key: "handleSuccessulAuthentication",
-    value: function handleSuccessulAuthentication() {
-      this.setState({ isSuccessfullyAuthenticated: true });
-    }
-  }, {
-    key: "conditionalRender",
-    value: function conditionalRender(bool) {
-      if (bool) {
-        return _react2.default.createElement("h2", { className: "welcome" });
-      }
+    key: "onSubmit",
+    value: function onSubmit(e) {
+      e.preventDefault();
     }
   }, {
     key: "render",
@@ -22406,10 +22294,25 @@ var App = function (_React$Component) {
         _react2.default.createElement(
           "h1",
           null,
-          "Welcome to ToDoer"
+          "Social todo app for cpsc213"
         ),
-        _react2.default.createElement(_Login2.default, { handleSuccessulAuthentication: this.handleSuccessulAuthentication }),
-        _react2.default.createElement(_Register2.default, { handleSuccessulAuthentication: this.handleSuccessulAuthentication }),
+        _react2.default.createElement(
+          "h2",
+          { className: "welcome" },
+          "Welcome, ",
+          this.appData.name
+        ),
+        _react2.default.createElement(
+          "div",
+          null,
+          _react2.default.createElement(
+            "h4",
+            null,
+            "Your Tasks"
+          ),
+          _react2.default.createElement(_Todos2.default, { rawTodos: this.appData.todos })
+        ),
+        _react2.default.createElement(_Form2.default, null),
         _react2.default.createElement(
           "footer",
           null,
@@ -22418,8 +22321,7 @@ var App = function (_React$Component) {
             { href: "/logout", className: "logout" },
             "Logout"
           )
-        ),
-        this.conditionalRender(this.state.isSuccessfullyAuthenticated)
+        )
       );
     }
   }]);
@@ -22427,7 +22329,115 @@ var App = function (_React$Component) {
   return App;
 }(_react2.default.Component);
 
-_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById("app"));
+_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById("dashboard"));
+
+/***/ }),
+/* 187 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(25);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Todo = function (_React$Component) {
+  _inherits(Todo, _React$Component);
+
+  function Todo(props) {
+    _classCallCheck(this, Todo);
+
+    var _this = _possibleConstructorReturn(this, (Todo.__proto__ || Object.getPrototypeOf(Todo)).call(this, props));
+
+    _this.onDelete = _this.onDelete.bind(_this);
+    _this.onToggle = _this.onToggle.bind(_this);
+    console.log("PROPS", _this.props);
+    return _this;
+  }
+
+  _createClass(Todo, [{
+    key: "onDelete",
+    value: function onDelete(e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "/deleteTodo",
+        data: {
+          id: this.props.rawTodo.id
+        },
+        success: function success(res) {
+          console.log("THAT REAL DELET");
+          window.location.href = res.redirect;
+          return;
+        },
+        error: function (err) {
+          console.log(err);
+          return;
+        }.bind(this)
+      });
+    }
+  }, {
+    key: "onToggle",
+    value: function onToggle(e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "/toggleTodo",
+        data: {
+          id: this.props.rawTodo.id,
+          currentCompleted: this.props.rawTodo.completed
+        },
+        success: function success(res) {
+          window.location.href = res.redirect;
+          return;
+        },
+        error: function (err) {
+          console.log(err);
+          return;
+        }.bind(this)
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var deleteButton = _react2.default.createElement(
+        "form",
+        { onSubmit: this.onDelete },
+        _react2.default.createElement("input", { type: "submit", name: "delete", className: "delete", value: "delete" })
+      );
+      return _react2.default.createElement(
+        "div",
+        null,
+        _react2.default.createElement(
+          "span",
+          { className: "task-title" },
+          this.props.rawTodo.name
+        ),
+        _react2.default.createElement(
+          "form",
+          { onSubmit: this.onToggle },
+          _react2.default.createElement("input", { type: "submit", name: "toggle", className: "toggle", value: this.props.rawTodo.completed ? "Mark incomplete" : "Mark complete" })
+        ),
+        this.props.owned ? deleteButton : _react2.default.createElement("div", null)
+      );
+    }
+  }]);
+
+  return Todo;
+}(_react2.default.Component);
+
+module.exports = Todo;
 
 /***/ })
 /******/ ]);
