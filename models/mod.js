@@ -45,7 +45,8 @@ module.exports.getUserById = function(id, cb) {
 }
 
 module.exports.addTodo = function(ownerID, input, cb) {
-  db.none("INSERT INTO Todo (owner_id, name, description, collab1_email, collab2_email, collab3_email, completed) VALUES ($1, $2, $3, $4, $5, $6, false)", [ownerID, input.form_name, input.form_description, 10, 11, 12])
+  console.log("INPUT", input);
+  db.none("INSERT INTO Todo (owner_id, name, description, collab1_email, collab2_email, collab3_email, completed) VALUES ($1, $2, $3, $4, $5, $6, false)", [ownerID, input.form_name, input.form_description, input.form_collaborator1, input.form_collaborator2, input.form_collaborator3])
   .then(function(data) {
     return cb(null);
   })
@@ -56,8 +57,6 @@ module.exports.addTodo = function(ownerID, input, cb) {
 }
 
 module.exports.getTodos = function(ownerID, email, cb) {
-  console.log("OWNERID", ownerID);
-  console.log("OWNER EMAIL", email);
   db.any("SELECT * FROM Todo WHERE owner_id=$1", [ownerID])
   .then(function(ownedTodos) {
     console.log("OWNED", ownedTodos);
