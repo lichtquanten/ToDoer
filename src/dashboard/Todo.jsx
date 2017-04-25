@@ -57,7 +57,7 @@ class Todo extends React.Component {
         <form onSubmit={this.onToggle}>
           <input type="submit" name="toggle" className="toggle" value={this.props.rawTodo.completed ? "Mark incomplete" : "Mark complete"}></input>
         </form>
-        {this.props.owned ? deleteButton : <div></div>}
+        {this.props.rawTodo.owned ? deleteButton : <div></div>}
       </div>
     );
   }

@@ -22192,10 +22192,9 @@ var Todos = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Todos.__proto__ || Object.getPrototypeOf(Todos)).call(this, props));
 
-    _this.getTodos = _this.getTodos.bind(_this);
     _this.createTodos = _this.createTodos.bind(_this);
     _this.state = {
-      todos: _this.getTodos(_this.props.rawTodos)
+      todos: _this.createTodos(_this.props.rawTodos)
     };
     return _this;
   }
@@ -22203,25 +22202,18 @@ var Todos = function (_React$Component) {
   _createClass(Todos, [{
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
-      this.setState({ todos: this.getTodos(nextProps.rawTodos) });
-    }
-  }, {
-    key: "getTodos",
-    value: function getTodos(rawTodos) {
-      var ownedTodos = this.createTodos(rawTodos.ownedTodos, true);
-      var sharedTodos = this.createTodos(rawTodos.sharedTodos, false);
-      var result = ownedTodos.concat(sharedTodos);
-      return result;
+      this.setState({ todos: this.createTodos(nextProps.rawTodos) });
     }
   }, {
     key: "createTodos",
-    value: function createTodos(rawTodos, owned) {
+    value: function createTodos(rawTodos) {
+      console.log("RAW", rawTodos);
       var result = rawTodos.map(function (rawTodo) {
         var className = rawTodo.completed ? "task completed" : "task";
         return _react2.default.createElement(
           "li",
           { className: className },
-          _react2.default.createElement(_Todo2.default, { rawTodo: rawTodo, owned: owned })
+          _react2.default.createElement(_Todo2.default, { rawTodo: rawTodo })
         );
       });
       return result;
@@ -22442,7 +22434,7 @@ var Todo = function (_React$Component) {
           { onSubmit: this.onToggle },
           _react2.default.createElement("input", { type: "submit", name: "toggle", className: "toggle", value: this.props.rawTodo.completed ? "Mark incomplete" : "Mark complete" })
         ),
-        this.props.owned ? deleteButton : _react2.default.createElement("div", null)
+        this.props.rawTodo.owned ? deleteButton : _react2.default.createElement("div", null)
       );
     }
   }]);

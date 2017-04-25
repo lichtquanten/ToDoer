@@ -46,7 +46,7 @@ module.exports.getUserById = function(id, cb) {
 
 module.exports.addTodo = function(ownerID, input, cb) {
   console.log("INPUT", input);
-  db.none("INSERT INTO Todo (owner_id, name, description, collab1_email, collab2_email, collab3_email, completed) VALUES ($1, $2, $3, $4, $5, $6, false)", [ownerID, input.form_name, input.form_description, input.form_collaborator1, input.form_collaborator2, input.form_collaborator3])
+  db.none("INSERT INTO Todo (owner_id, name, description, collab1_email, collab2_email, collab3_email, completed, timestamp) VALUES ($1, $2, $3, $4, $5, $6, false, now())", [ownerID, input.form_name, input.form_description, input.form_collaborator1, input.form_collaborator2, input.form_collaborator3])
   .then(function(data) {
     return cb(null);
   })
@@ -57,17 +57,18 @@ module.exports.addTodo = function(ownerID, input, cb) {
 }
 
 module.exports.getTodos = function(ownerID, email, cb) {
-  db.any("SELECT * FROM Todo WHERE owner_id=$1", [ownerID])
-  .then(function(ownedTodos) {
-    console.log("OWNED", ownedTodos);
-    db.any("SELECT * FROM Todo WHERE collab1_email=$1 OR collab2_email=$1 OR collab3_email=$1", [email])
-    .then(function(sharedTodos) {
-      console.log("SHARED", sharedTodos);
-      return cb(null, {ownedTodos: ownedTodos, sharedTodos: sharedTodos});
-    }).catch(function(err) {
-      console.log(err);
-      return cb(err);
-    })
+  db.any("SELECT * FROM Todo WHERE owner_id=$1 OR collab1_email=$2 OR collab2_email=$2 OR collab3_email=$2 ORDER BY timestamp ASC", [ownerID, email])
+  .then(function(todos) {
+    console.log(todos);
+    todos = todos.map(function(todo) {
+      if (todo.owner_id == ownerID) {
+        todo.owned = true;
+      } else {
+        todo.owned = false;
+      }
+      return todo;
+    });
+    cb(null, todos);
   })
   .catch(function(err) {
     console.log(err);
