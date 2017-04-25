@@ -22041,7 +22041,6 @@ var Form = function (_React$Component) {
         }.bind(this),
         error: function error(err) {
           console.log(err);
-          alert("Server error.");
         }
       });
     }

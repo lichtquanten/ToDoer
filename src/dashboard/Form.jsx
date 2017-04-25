@@ -37,7 +37,6 @@ class Form extends React.Component {
       }).bind(this),
       error: function(err) {
         console.log(err);
-        alert("Server error.");
       }
     });
   }
