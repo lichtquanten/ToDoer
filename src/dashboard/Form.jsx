@@ -79,22 +79,23 @@ class Form extends React.Component {
       <div>
           <h4>Add a new task</h4>
           <form className="createTask" onSubmit={this.onSubmit}>
+              <p className="errors"></p>
               <label htmlFor="name">Task name</label>
               <input id="form_name" name="name" type="text"></input>
-              <p className="errors">{this.nameError(this.state.errors)}</p>
+              <p>{this.nameError(this.state.errors)}</p>
               <br></br>
               <label htmlFor="description">Task Description</label>
               <input id="form_description" name="description" type="text"></input>
-              <p className="errors">{this.descriptionError(this.state.errors)}</p>
+              <p>{this.descriptionError(this.state.errors)}</p>
               <br></br>Collaborators<br></br>
               <input id="form_collaborator1" name="collaborator1" type="email"></input>
-              <p className="errors">{this.collaboratorError(this.state.errors, "collaborator1")}</p>
+              <p>{this.collaboratorError(this.state.errors, "collaborator1")}</p>
               <br></br>
               <input id="form_collaborator2" name="collaborator2" type="email"></input>
-              <p className="errors">{this.collaboratorError(this.state.errors, "collaborator2")}</p>
+              <p>{this.collaboratorError(this.state.errors, "collaborator2")}</p>
               <br></br>
               <input id="form_collaborator3" name="collaborator3" type="email"></input>
-              <p className="errors">{this.collaboratorError(this.state.errors, "collaborator3")}</p>
+              <p>{this.collaboratorError(this.state.errors, "collaborator3")}</p>
               <br></br>
               <input type="submit" className="create-task-submit"></input>
           </form>

@@ -41,7 +41,6 @@ class Login extends React.Component {
       }).bind(this),
       error: function(err) {
         console.log(err);
-        alert("Server error.");
       }
     });
   }
